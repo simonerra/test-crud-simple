@@ -64,7 +64,6 @@ class UsuarioServicesImplTest {
         assertEquals(24, usuarioEntity02.getEdad());
         assertEquals("isi@isi.com", usuarioEntity02.getCorreo());
         assertEquals(993492324, usuarioEntity02.getTelefono());
-
         //verify
         verify(usuarioRepository).findById(dataTest.get(0).getId());
         verify(usuarioRepository).findById(dataTest.get(1).getId());
@@ -87,7 +86,25 @@ class UsuarioServicesImplTest {
         //usuarios
         assertNotEquals(Collections.emptyList(), usuarioEntityList);
         assertEquals(2, usuarioEntityList.size());
+        //verify
+        verify(usuarioRepository).findAll();
 
+    }
+
+    @Test
+    void findAllEmptyList() {
+
+        //GIVEN
+
+        //WHEN
+        when(usuarioRepository.findAll()).thenReturn(Collections.emptyList());
+
+        //INVOKE METHODS
+        List<UsuarioEntity> usuarioEntityList = usuarioServices.findAll();
+
+        //THEN
+        //usuarios
+        assertEquals(Collections.emptyList(), usuarioEntityList);
         //verify
         verify(usuarioRepository).findAll();
 
@@ -144,7 +161,27 @@ class UsuarioServicesImplTest {
         assertEquals("emi@emi.com", usuarioEntity01Saved.getCorreo());
         assertEquals(0, usuarioEntity01Saved.getTelefono());
         //verify
+        verify(usuarioRepository).findById(usuarioDTO01.getId());
         verify(usuarioRepository).save(usuarioEntity01);
+
+    }
+
+    @Test
+    void updateByIdNotFound() {
+
+        //GIVEN
+        UsuarioDTO usuarioDTO01 = DataTest.usuarioDTO01;
+
+        //WHEN
+        when(usuarioRepository.findById(usuarioDTO01.getId())).thenReturn(Optional.empty());
+
+        //INVOKE METHODS
+        UsuarioEntity usuarioEntity01Saved = usuarioServices.updateById(usuarioDTO01.getId(), usuarioDTO01);
+
+        //THEN
+        //usuario
+        assertNull(usuarioEntity01Saved);
+        //verify
         verify(usuarioRepository).findById(usuarioDTO01.getId());
 
     }
@@ -170,14 +207,37 @@ class UsuarioServicesImplTest {
         assertEquals("emi@emi.com", usuarioEntity01Deleted.getCorreo());
         assertEquals(0, usuarioEntity01Deleted.getTelefono());
         //verify
+        verify(usuarioRepository).findById(usuarioEntity01.getId());
         verify(usuarioRepository).deleteById(usuarioEntity01.getId());
 
     }
 
     @Test
+    void deleteByIdNotFound() {
+
+        //GIVEN
+        UsuarioEntity usuarioEntity01 = DataTest.usuarioEntity01;
+
+        //WHEN
+        when(usuarioRepository.findById(usuarioEntity01.getId())).thenReturn(Optional.empty());
+
+        //INVOKE METHODS
+        UsuarioEntity usuarioEntity01Deleted = usuarioServices.deleteById(usuarioEntity01.getId());
+
+        //THEN
+        //usuario
+        assertNull(usuarioEntity01Deleted);
+        //verify
+        verify(usuarioRepository).findById(usuarioEntity01.getId());
+
+    }
+
+    @Test
     void deleteAll() {
+
         //INVOKE METHODS
         usuarioServices.deleteAll();
+        
         //THEN
         verify(usuarioRepository).deleteAll();
 
