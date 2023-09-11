@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import test.data.DataTest;
+import resources.data.DataTest;
 import test.dto.UsuarioDTO;
 import test.entity.UsuarioEntity;
 import test.repository.UsuarioRepository;
@@ -237,7 +237,7 @@ class UsuarioServicesImplTest {
 
         //INVOKE METHODS
         usuarioServices.deleteAll();
-        
+
         //THEN
         verify(usuarioRepository).deleteAll();
 
