@@ -1,11 +1,11 @@
-package test.service;
+package test.services;
 
 import java.util.List;
 
 import test.dto.UsuarioDTO;
 import test.entity.UsuarioEntity;
 
-public interface UsuarioService {
+public interface UsuarioServices {
 	
 	UsuarioEntity findById(Long id);
 	

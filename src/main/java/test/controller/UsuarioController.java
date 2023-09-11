@@ -14,61 +14,60 @@ import org.springframework.web.bind.annotation.RestController;
 
 import test.dto.UsuarioDTO;
 import test.entity.UsuarioEntity;
-import test.service.UsuarioService;
+import test.services.UsuarioServices;
 
 @RestController
 public class UsuarioController {
 
-	private UsuarioService usuarioService;
+    UsuarioServices usuarioService;
 
-	public UsuarioController(UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
-	}
+    public UsuarioController(UsuarioServices usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
-	@GetMapping("findById/{id}")
-	public ResponseEntity<UsuarioEntity> findById(@PathVariable Long id) {
-		UsuarioEntity usuarioEntity = usuarioService.findById(id);
-		if (usuarioEntity != null) {
-			return new ResponseEntity<>(usuarioEntity, HttpStatus.OK);
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
+    @GetMapping("findById/{id}")
+    public ResponseEntity<UsuarioEntity> findById(@PathVariable Long id) {
+        UsuarioEntity usuarioEntity = usuarioService.findById(id);
+        if (usuarioEntity == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return new ResponseEntity<>(usuarioEntity, HttpStatus.OK);
+        }
+    }
 
-	@GetMapping("findAll")
-	public ResponseEntity<List<UsuarioEntity>> findAll() {
-		List<UsuarioEntity> listado = usuarioService.findAll();
-		if (!listado.isEmpty()) {
-			return new ResponseEntity<>(listado, HttpStatus.OK);
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
+    @GetMapping("findAll")
+    public ResponseEntity<List<UsuarioEntity>> findAll() {
+        return ResponseEntity.ok(usuarioService.findAll());
+    }
 
-	@PostMapping("save")
-	public ResponseEntity<UsuarioEntity> save(@RequestBody UsuarioDTO usuarioDTO) {
-		return new ResponseEntity<>(usuarioService.save(usuarioDTO), HttpStatus.OK);
-	}
+    @PostMapping("save")
+    public ResponseEntity<UsuarioEntity> save(@RequestBody UsuarioDTO usuarioDTO) {
+        return new ResponseEntity<>(usuarioService.save(usuarioDTO), HttpStatus.OK);
+    }
 
-	@PutMapping("updateById/{id}")
-	public ResponseEntity<UsuarioEntity> updateById(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
-		if (usuarioService.findById(id) != null) {
-			return new ResponseEntity<>(usuarioService.updateById(id, usuarioDTO),
-					HttpStatus.OK);
-		}
-		return ResponseEntity.notFound().build();
-	}
+    @PutMapping("updateById/{id}")
+    public ResponseEntity<UsuarioEntity> updateById(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
+        UsuarioEntity usuarioEntity = usuarioService.updateById(id, usuarioDTO);
+        if (usuarioEntity == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return new ResponseEntity<>(usuarioEntity, HttpStatus.OK);
+        }
+    }
 
-	@DeleteMapping("deleteById/{id}")
-	public ResponseEntity<UsuarioEntity> delete(@PathVariable("id") Long id) {
-		if (usuarioService.findById(id) != null) {
-			return new ResponseEntity<>(usuarioService.deleteById(id), HttpStatus.OK);
-		}
-		return ResponseEntity.notFound().build();
-	}
+    @DeleteMapping("deleteById/{id}")
+    public ResponseEntity<UsuarioEntity> deleteById(@PathVariable("id") Long id) {
+        UsuarioEntity usuarioEntity = usuarioService.deleteById(id);
+        if (usuarioEntity == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return new ResponseEntity<>(usuarioEntity, HttpStatus.OK);
+        }
+    }
 
-	@DeleteMapping("deleteAll")
-	public ResponseEntity<String> delete() {
-		usuarioService.deleteAll();
-		return ResponseEntity.ok("Todo borrado");
-	}
+    @DeleteMapping("deleteAll")
+    public void deleteAll() {
+        usuarioService.deleteAll();
+    }
 
 }
