@@ -1,4 +1,4 @@
-package resources.data;
+package data;
 
 import test.dto.UsuarioDTO;
 import test.entity.UsuarioEntity;

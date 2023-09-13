@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import resources.data.DataTest;
+import data.DataTest;
 import test.dto.UsuarioDTO;
 import test.entity.UsuarioEntity;
 import test.services.impl.UsuarioServicesImpl;
